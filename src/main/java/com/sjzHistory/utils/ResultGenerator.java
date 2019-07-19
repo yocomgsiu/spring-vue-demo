@@ -1,15 +1,16 @@
-package com.casic.demo.utils;
+package com.sjzHistory.utils;
 
 
-import com.casic.demo.entity.RestResult;
-import com.casic.demo.entity.ResultCode;
 import org.springframework.stereotype.Component;
+
+import com.sjzHistory.entity.RestResult;
+import com.sjzHistory.entity.ResultCode;
 
 /**
  * 工厂模式
  * 接口信息生成工具
  * 。@Component 添加到Spring组件中
- * Created by bekey on 2017/12/10.
+ * Created by Yocomg on 2019/7/16
  */
 @Component
 public class ResultGenerator {

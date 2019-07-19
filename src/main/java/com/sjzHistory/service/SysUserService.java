@@ -1,10 +1,10 @@
-package com.casic.demo.service;
+package com.sjzHistory.service;
 
-import com.casic.demo.entity.SysUser;
+import com.sjzHistory.entity.SysUser;
 
 /**
  * 用户服务层接口
- * Created by bekey on 2017/12/20.
+ * Created by Yocomg on 2019/7/16
  */
 public interface SysUserService {
     /**

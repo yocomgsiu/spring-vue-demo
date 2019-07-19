@@ -1,4 +1,4 @@
-package com.casic.demo.entity;
+package com.sjzHistory.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

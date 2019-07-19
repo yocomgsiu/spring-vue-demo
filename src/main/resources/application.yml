@@ -5,10 +5,10 @@ server:
 
 spring:
   datasource: # set database config
-    url: jdbc:mysql://localhost:3306/springdemo?useUnicode=true&characterEncoding=utf8&useSSL=false
-    username: normal
-    password: normal
-    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 123456aA
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa: # set jpa
     database: MYSQL # specify ths DBMS
     show-sql: true # show or not log for each sql query

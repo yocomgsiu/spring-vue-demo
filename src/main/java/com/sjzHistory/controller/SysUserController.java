@@ -1,9 +1,5 @@
-package com.casic.demo.controller;
+package com.sjzHistory.controller;
 
-import com.casic.demo.entity.RestResult;
-import com.casic.demo.entity.SysUser;
-import com.casic.demo.service.SysUserService;
-import com.casic.demo.utils.ResultGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sjzHistory.entity.RestResult;
+import com.sjzHistory.entity.SysUser;
+import com.sjzHistory.service.SysUserService;
+import com.sjzHistory.utils.ResultGenerator;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
@@ -25,7 +26,7 @@ import javax.validation.constraints.NotNull;
  * . @RestController 该类下所有返回值默认以json格式进行返回
  * . @RequestMapping 匹配url地址 /user
  * . @Validated 代表该类启用参数验证，通过添加注解可以验证参数
- * Created by bekey on 2017/12/20.
+ * Created by Yocomg on 2019/7/16
  */
 @RestController
 @RequestMapping("/user")

@@ -1,13 +1,14 @@
-package com.casic.demo.service;
+package com.sjzHistory.service;
 
-import com.casic.demo.entity.SysUser;
-import com.casic.demo.repository.SysUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sjzHistory.entity.SysUser;
+import com.sjzHistory.repository.SysUserRepository;
+
 /**
  * 用户服务层实现类
- * Created by bekey on 2017/12/20.
+ * Created by Yocomg on 2019/7/16
  */
 @Service("SysUserService")
 public class SysUserServiceImpl implements SysUserService{

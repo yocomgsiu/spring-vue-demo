@@ -1,9 +1,9 @@
-package com.casic.demo.entity;
+package com.sjzHistory.entity;
 
 /**
  * 统一封装API返回信息
  * 千万别加@Entity 否则Hibernate会给你创建表
- * Created by bekey on 2017/12/10.
+ * Created by Yocomg on 2019/7/16
  */
 public class RestResult {
     //状态码
