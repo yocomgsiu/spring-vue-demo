@@ -49,6 +49,12 @@
 			<scope>runtime</scope>
 			<version>8.0.16</version>
 		</dependency>
+		<!--lombok简化Domain代码-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
 		<!-- 测试框架 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

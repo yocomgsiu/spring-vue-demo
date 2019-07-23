@@ -5,7 +5,7 @@ package com.sjzHistory.entity;
  * 千万别加@Entity 否则Hibernate会给你创建表
  * Created by Yocomg on 2019/7/16
  */
-public class RestResult {
+public class RespResult {
     //状态码
     private int code;
     //消息
@@ -13,11 +13,11 @@ public class RestResult {
     //额外的内容
     private Object data;
 
-    public RestResult(){
+    public RespResult(){
 
     }
 
-    public RestResult setCode(ResultCode code) {
+    public RespResult setCode(ResultCode code) {
         this.code = code.getCode();
         return this;
     }
@@ -26,7 +26,7 @@ public class RestResult {
         return code;
     }
 
-    public RestResult setCode(int code) {
+    public RespResult setCode(int code) {
         this.code = code;
         return this;
     }
@@ -35,7 +35,7 @@ public class RestResult {
         return message;
     }
 
-    public RestResult setMessage(String message) {
+    public RespResult setMessage(String message) {
         this.message = message;
         return this;
     }
@@ -44,7 +44,7 @@ public class RestResult {
         return data;
     }
 
-    public RestResult setData(Object data) {
+    public RespResult setData(Object data) {
         this.data = data;
         return this;
     }

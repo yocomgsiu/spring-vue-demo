@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sjzHistory.entity.RestResult;
-import com.sjzHistory.entity.SysUser;
-import com.sjzHistory.service.SysUserService;
+import com.sjzHistory.entity.RespResult;
+import com.sjzHistory.entity.User;
+import com.sjzHistory.service.IUserService;
 import com.sjzHistory.utils.ResultGenerator;
 
 import javax.servlet.http.HttpSession;
@@ -31,16 +33,17 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping("/user")
 @Validated
-public class SysUserController {
+@SuppressWarnings("rawtypes")
+public class UserController {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final SysUserService userService;
+    private final IUserService iUserService;
 
     private final ResultGenerator generator;
 
     @Autowired  //自动装配
-    public SysUserController(SysUserService userService, ResultGenerator generator) {
-        this.userService = userService;
+    public UserController(IUserService iUserService, ResultGenerator generator) {
+        this.iUserService = iUserService;
         this.generator = generator;
     }
 
@@ -51,8 +54,8 @@ public class SysUserController {
      * @return 注册成功会将注册信息返回（！因为是demo所以没有考虑安全性）
      */
     @RequestMapping("/register")
-    public RestResult register(@Valid SysUser user, BindingResult bindingResult) {
-        return generator.getSuccessResult("用户注册成功",userService.saveUser(user));
+    public RespResult register(@Valid User User, BindingResult bindingResult) {
+        return generator.getSuccessResult("用户注册成功",iUserService.saveUser(User));
     }
 
     /**
@@ -61,8 +64,8 @@ public class SysUserController {
      * @return 登陆成功则返回相关信息，否则返回错误提示
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public RestResult login(@NotNull(message = "用户名不能为空") String name,@NotNull(message = "密码不能为空") String password, HttpSession session) {
-        SysUser user = userService.checkLogin(name, password);
+    public RespResult login(@NotNull(message = "用户名不能为空") String name,@NotNull(message = "密码不能为空") String password, HttpSession session) {
+        User user = iUserService.checkLogin(name, password);
         if(user != null) {
             //储存到session中
             session.setAttribute("user",user);
@@ -71,11 +74,23 @@ public class SysUserController {
         return generator.getFailResult("用户名/密码错误");
     }
 
+	@RequestMapping(value = "/login2",method = RequestMethod.POST)
+    public ResponseEntity<User> login2(@NotNull String name,@NotNull String password, HttpSession session) {
+    	User user = iUserService.checkLogin(name, password);
+    	if(user != null) {
+    		log.info("find user {} and login",user.toString());
+    		//储存到session中
+    		session.setAttribute("user", user);
+    		return new ResponseEntity<>(user, HttpStatus.OK);
+    	}
+    	return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+    }
+
     /**
      * 为参数验证添加异常处理器
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    public RestResult handleConstraintViolationException(ConstraintViolationException cve) {
+    public RespResult handleConstraintViolationException(ConstraintViolationException cve) {
         //这里简化处理了，cve.getConstraintViolations 会得到所有错误信息的迭代，可以酌情处理
         String errorMessage = cve.getConstraintViolations().iterator().next().getMessage();
         return generator.getFailResult(errorMessage);
@@ -85,7 +100,7 @@ public class SysUserController {
      * 主键/唯一约束违反异常
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public RestResult handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
+    public RespResult handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
         //如果注册两个相同的用户名到报这个异常
         return generator.getFailResult("违反主键/唯一约束条件");
     }
