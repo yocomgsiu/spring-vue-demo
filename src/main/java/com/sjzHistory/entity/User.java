@@ -23,11 +23,11 @@ public class User {
 	private long id; // 主键 自增
 	// 唯一 非空
 	private String name;
-	//密码 非空
+	//密码 
 	private String password;
-	//邮箱 非空
+	//邮箱 
 	private String email;
-	//邮箱是否验证过 非空
+	//邮箱是否验证过 
 	private boolean isMailVerifed;
 	//用户是否被禁用
 	private boolean isDisabled;

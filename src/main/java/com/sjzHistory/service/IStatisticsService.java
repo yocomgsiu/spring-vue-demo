@@ -1,5 +1,8 @@
 package com.sjzHistory.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.sjzHistory.entity.Statistics;
 import com.sjzHistory.entity.User;
 
@@ -9,14 +12,21 @@ public interface IStatisticsService {
      * @param Statistics
      * @return 保存成功将统计记录返回，否则返回null
      */
-    User saveStatistics(Statistics statistics);
+	Statistics saveStatistics(Statistics statistics);
 
     
     /**
-     * 按id查找
-     * @param id
-     * @return 注册成功将用户信息返回，否则返回null
+     * 查User总数
      */
-	User findStatisticsById(long id);
+    long countUsers();
 
+    /**
+	 * 查Article总数
+	 */
+    long countArticles();
+
+	/**
+	 * 查所有统计Statistics
+	 */
+	Page<Statistics> findAllStatistics(Pageable pageable);
 }

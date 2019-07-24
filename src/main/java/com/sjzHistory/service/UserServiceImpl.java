@@ -10,7 +10,7 @@ import com.sjzHistory.repository.UserRepository;
  * 用户服务层实现类
  * Created by Yocomg on 2019/7/16
  */
-@Service("SysUserService")
+@Service("UserService")
 public class UserServiceImpl implements IUserService{
     @Autowired
     UserRepository userRepository;

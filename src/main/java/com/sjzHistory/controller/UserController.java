@@ -1,27 +1,29 @@
 package com.sjzHistory.controller;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sjzHistory.entity.RespResult;
+import com.sjzHistory.entity.Statistics;
 import com.sjzHistory.entity.User;
+import com.sjzHistory.service.IStatisticsService;
 import com.sjzHistory.service.IUserService;
 import com.sjzHistory.utils.ResultGenerator;
-
-import javax.servlet.http.HttpSession;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * 用户控制层
@@ -32,19 +34,20 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @RequestMapping("/user")
-@Validated
-@SuppressWarnings("rawtypes")
 public class UserController {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final IUserService iUserService;
+    private final IUserService userService;
 
     private final ResultGenerator generator;
+    
+    private final IStatisticsService satisticsServices;
 
     @Autowired  //自动装配
-    public UserController(IUserService iUserService, ResultGenerator generator) {
-        this.iUserService = iUserService;
+    public UserController(IUserService userService, IStatisticsService satisticsServices, ResultGenerator generator) {
+        this.userService = userService;
         this.generator = generator;
+        this.satisticsServices = satisticsServices;
     }
 
     /**
@@ -55,7 +58,7 @@ public class UserController {
      */
     @RequestMapping("/register")
     public RespResult register(@Valid User User, BindingResult bindingResult) {
-        return generator.getSuccessResult("用户注册成功",iUserService.saveUser(User));
+        return generator.getSuccessResult("用户注册成功",userService.saveUser(User));
     }
 
     /**
@@ -65,7 +68,7 @@ public class UserController {
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public RespResult login(@NotNull(message = "用户名不能为空") String name,@NotNull(message = "密码不能为空") String password, HttpSession session) {
-        User user = iUserService.checkLogin(name, password);
+        User user = userService.checkLogin(name, password);
         if(user != null) {
             //储存到session中
             session.setAttribute("user",user);
@@ -76,7 +79,7 @@ public class UserController {
 
 	@RequestMapping(value = "/login2",method = RequestMethod.POST)
     public ResponseEntity<User> login2(@NotNull String name,@NotNull String password, HttpSession session) {
-    	User user = iUserService.checkLogin(name, password);
+    	User user = userService.checkLogin(name, password);
     	if(user != null) {
     		log.info("find user {} and login",user.toString());
     		//储存到session中
@@ -85,23 +88,33 @@ public class UserController {
     	}
     	return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
     }
+	
+	@RequestMapping(value = "/test",method = RequestMethod.GET)
+	public void test(@PageableDefault(value = 15, sort = { "id" }, direction = Sort.Direction.ASC) 
+    Pageable pageable) {
 
-    /**
-     * 为参数验证添加异常处理器
-     */
-    @ExceptionHandler(ConstraintViolationException.class)
-    public RespResult handleConstraintViolationException(ConstraintViolationException cve) {
-        //这里简化处理了，cve.getConstraintViolations 会得到所有错误信息的迭代，可以酌情处理
-        String errorMessage = cve.getConstraintViolations().iterator().next().getMessage();
-        return generator.getFailResult(errorMessage);
-    }
+		long articlesCount = satisticsServices.countArticles();
+		System.out.println("articlesCount===="+articlesCount);		
+		
+		long usersCount = satisticsServices.countUsers();
+		System.out.println("usersCount===="+usersCount);
+		
+		Page<Statistics> staPage = satisticsServices.findAllStatistics(pageable);
+		System.out.println("staPage===="+staPage.getContent());
+		
+		Statistics statistics = new Statistics();
+		statistics.setId(2346);
+		statistics.setDate(12);
+		statistics.setUserCount(3);
+		statistics.setUserIncreaseCount(1);
+		statistics.setArticleCount(33);
+		statistics.setArticleIncreaseCount(4);
+		Statistics saveStatistics = satisticsServices.saveStatistics(statistics);
+		System.out.println("saveStatistics===="+saveStatistics);
+		
+	}
 
-    /**
-     * 主键/唯一约束违反异常
-     */
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public RespResult handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
-        //如果注册两个相同的用户名到报这个异常
-        return generator.getFailResult("违反主键/唯一约束条件");
-    }
+	
+	
+	
 }
