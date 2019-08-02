@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.ToString;
@@ -15,6 +16,7 @@ import lombok.ToString;
 @Data
 @Entity
 @ToString
+@Table(name="article")
 public class Article {
 	// 主键 自增
 	@Id
@@ -32,6 +34,9 @@ public class Article {
 //	返回自 1970 年 1 月 1 日 00:00:00 GMT 以来此 Date 对象表示的毫秒数。
 //		void setTime(long time)
 //	用自1970年1月1日00:00:00 GMT以后time毫秒数设置时间和日期。
+
+	//是否被删除（删除是假删除，只是打了标志位，数据无价）
+	private boolean isDeleted;	
 	
 	// 图片1URL
 	private String pic1Url;
@@ -60,7 +65,17 @@ public class Article {
 	// 修改人者id
 	private String modifierName;
 	// 修改人者id
-	private long modifierMail;
+	private String modifierMail;
+	// 修改时间
+	private long modifyTime;
 	
+	// 删除人者id
+	private long deletedId;
+	// 删除人者id
+	private String deletedName;
+	// 删除人者id
+	private String deletedMail;
+	// 删除时间
+	private long deletedTime;
 
 }

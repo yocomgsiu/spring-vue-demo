@@ -26,10 +26,9 @@ import com.sjzHistory.service.IUserService;
 import com.sjzHistory.utils.ResultGenerator;
 
 /**
- * 用户控制层
+ * 用户controller
  * . @RestController 该类下所有返回值默认以json格式进行返回
  * . @RequestMapping 匹配url地址 /user
- * . @Validated 代表该类启用参数验证，通过添加注解可以验证参数
  * Created by Yocomg on 2019/7/16
  */
 @RestController
@@ -51,20 +50,28 @@ public class UserController {
     }
 
     /**
-     * 匹配 /user/register 地址
-     * .在实体前添加 @Valid 注解代表要对这个实体进行验证，如果验证不通过就会报异常
-     * bindingResult是对异常信息的包装，不过这里我们不用，而是交由异常处理器进行处理
-     * @return 注册成功会将注册信息返回（！因为是demo所以没有考虑安全性）
+     * 第一版本没有登记，更没有注册，发文章仅需要留下邮箱和昵称(无需校验)。
+     * 第二版才有邮箱和昵称通过校验.
+     * 没有注册，登记时仅需要留下邮箱和昵称通过校验。本来就没啥用户。
      */
     @RequestMapping("/register")
-    public RespResult register(@Valid User User, BindingResult bindingResult) {
-        return generator.getSuccessResult("用户注册成功",userService.saveUser(User));
+    public RespResult register(User user) {
+    	if(user.getEmail().isEmpty()|| null == user.getEmail()) {
+    		return generator.getFailResult("请填写邮箱");
+    	}
+    	if(user.getName().isEmpty()|| null == user.getName()) {
+    		return generator.getFailResult("请填写昵称");
+    	}
+//    	没有注册，登记时仅需要留下邮箱和昵称。
+//    	if(user.getPassword().isEmpty()|| null == user.getPassword()) {
+//    		return generator.getFailResult("请填写密码");
+//    	}
+    	
+        return generator.getSuccessResult("登记成功",userService.saveUser(user));
     }
 
     /**
-     * 匹配 /user/login 地址 ,限定POST方法
-     * 。@NotNull 在字段前添加注解代表验证该字段，如果为空则报异常
-     * @return 登陆成功则返回相关信息，否则返回错误提示
+     * 用户登录，
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public RespResult login(@NotNull(message = "用户名不能为空") String name,@NotNull(message = "密码不能为空") String password, HttpSession session) {
@@ -93,24 +100,8 @@ public class UserController {
 	public void test(@PageableDefault(value = 15, sort = { "id" }, direction = Sort.Direction.ASC) 
     Pageable pageable) {
 
-		long articlesCount = satisticsServices.countArticles();
-		System.out.println("articlesCount===="+articlesCount);		
 		
-		long usersCount = satisticsServices.countUsers();
-		System.out.println("usersCount===="+usersCount);
 		
-		Page<Statistics> staPage = satisticsServices.findAllStatistics(pageable);
-		System.out.println("staPage===="+staPage.getContent());
-		
-		Statistics statistics = new Statistics();
-		statistics.setId(2346);
-		statistics.setDate(12);
-		statistics.setUserCount(3);
-		statistics.setUserIncreaseCount(1);
-		statistics.setArticleCount(33);
-		statistics.setArticleIncreaseCount(4);
-		Statistics saveStatistics = satisticsServices.saveStatistics(statistics);
-		System.out.println("saveStatistics===="+saveStatistics);
 		
 	}
 

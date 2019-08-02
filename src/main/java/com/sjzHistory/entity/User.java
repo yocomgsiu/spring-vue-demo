@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.ToString;
@@ -16,6 +17,7 @@ import lombok.ToString;
 @Data
 @Entity
 @ToString
+@Table(name="user")
 public class User {
 	// 主键 自增
 	@Id
@@ -27,6 +29,8 @@ public class User {
 	private String password;
 	//邮箱 
 	private String email;
+	//验证码 
+	private String verifyCode;
 	//邮箱是否验证过 
 	private boolean isMailVerifed;
 	//用户是否被禁用

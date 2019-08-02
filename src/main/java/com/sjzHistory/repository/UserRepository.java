@@ -10,13 +10,29 @@ import com.sjzHistory.entity.User;
  * Created by Yocomg on 2019/7/16
  */
 public interface UserRepository extends JpaRepository<User,Integer> {
-    /**
-     * 按用户名——密码查找
-     */
+
+	/**
+	 * 按用户名——密码查找
+	 * @param name
+	 * @param password
+	 * @return
+	 */
     User findFirstByNameAndPassword(String name, String password);
+    
+    
     /**
      * 按id查找
+     * @param id
+     * @return
      */
     User findFirstById(long id);
+    
+
+    /**
+     * 按email查找
+     * @param email
+     * @return
+     */
+	User findFirstByEmail(String email);
 
 }

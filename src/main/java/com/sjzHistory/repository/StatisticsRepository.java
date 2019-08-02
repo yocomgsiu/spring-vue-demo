@@ -18,6 +18,12 @@ public interface StatisticsRepository extends JpaRepository<Statistics,Integer> 
 	 * 查寻Statistics分析数据
 	 */
 	Page<Statistics> findAll(Pageable pageable);
+	
+//	/**
+//	 * 查寻最近的一条数据
+//	 */
+//	@Query(value = "select s from Statistics s order by s.date DESC limit 1")
+//	Statistics findLastOneStatistics();
 
 	/**
 	 * 保存Statistics分析数据
@@ -29,10 +35,23 @@ public interface StatisticsRepository extends JpaRepository<Statistics,Integer> 
 	 */
 	@Query(value = "select count(*) from User")
 	long countUsers();
-
+	
+	/**
+	 * 查被禁User总数
+	 */
+	@Query(value = "select count(*) from User u where u.isDisabled = true")
+	long countDisabledUsers();
+	
 	/**
 	 * 查Article总数
 	 */
 	@Query(value = "select count(*) from Article")
 	long countArticles();
+
+	/**
+	 * 查Article总数
+	 */
+	@Query(value = "select count(*) from Article a where a.isDeleted = true")
+	long countDeletedArticles();
+
 }
