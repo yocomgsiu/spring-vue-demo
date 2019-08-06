@@ -22,7 +22,7 @@ import com.sjzHistory.utils.ResultGenerator;
  * Created by Yocomg on 2019/7/30
  */
 @RestController
-@RequestMapping("/statistics")
+@RequestMapping("/api/statistics")
 public class StatisticsController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 

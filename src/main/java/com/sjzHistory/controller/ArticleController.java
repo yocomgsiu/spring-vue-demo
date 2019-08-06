@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sjzHistory.entity.Article;
@@ -21,7 +22,7 @@ import com.sjzHistory.utils.ResultGenerator;
  * /article . @Validated 代表该类启用参数验证，通过添加注解可以验证参数 Created by Yocomg on 2019/7/26
  */
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/api/article")
 public class ArticleController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -110,7 +111,7 @@ public class ArticleController {
 	 * 
 	 */
 	@RequestMapping(value = "/timeline", method = RequestMethod.GET)
-	public RespResult register(Long timeKey, String keyWord, Pageable pageable) {
+	public RespResult timeline(@RequestParam(value="timeKey", required = false) long timeKey, @RequestParam(value="keyWord", required = false) String keyWord, Pageable pageable) {
 		if (0 == timeKey) {
 			return generator.getFailResult("请选择时间");
 		}

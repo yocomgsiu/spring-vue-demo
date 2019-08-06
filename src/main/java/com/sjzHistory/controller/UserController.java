@@ -32,7 +32,7 @@ import com.sjzHistory.utils.ResultGenerator;
  * Created by Yocomg on 2019/7/16
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
