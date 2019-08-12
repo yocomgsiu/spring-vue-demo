@@ -25,7 +25,7 @@ public class ArticleServiceImpl implements IArticleService {
 
 	@Override
 	public Page<Article> findAllArticle(long timeKey, String titleKey, String contentKey, Pageable pageable) {
-		return articleRepository.findAll(timeKey,titleKey, contentKey, pageable);
+		return articleRepository.findAllArticles(timeKey,titleKey, contentKey, pageable);
 	}
 
 }

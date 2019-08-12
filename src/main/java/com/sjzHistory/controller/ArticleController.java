@@ -61,6 +61,7 @@ public class ArticleController {
 		if (article.getAuthorMail().isEmpty() || null == article.getAuthorMail()) {
 			return generator.getFailResult("请留下邮箱");
 		} else {
+			// 第一版业务需要，很多逻辑放在controller，以后移到service
 			// 有邮箱，则查看该用户是否注登记没有
 			User finduserUser = userService.findUserByEmail(article.getAuthorMail());
 			if (null != finduserUser) {
@@ -79,6 +80,7 @@ public class ArticleController {
 		article.setCreatedTime(System.currentTimeMillis());
 		//暂时没有dto，但也不能直接返回article（暴露太多），暂时以是否返回null为判断成功条件
 		Article savedArticle = articleService.saveArticle(article);
+		
 		if (null!= savedArticle) {			
 			return generator.getSuccessResult();
 		} else {
@@ -90,9 +92,8 @@ public class ArticleController {
 	 * 修改文章，
 	 * 第一版本没有此功能，待有登陆后，管理员（专业用户）可修改
 	 */
-	@RequestMapping(value = "/setdelete", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/setdelete", method = RequestMethod.POST)
 	public RespResult delete(Article article) {
-
 		return null;
 	}
 	
@@ -100,9 +101,8 @@ public class ArticleController {
 	 * 删除文章，不是真从硬盘删除，仅仅打个标记
 	 * 第一版本没有此功能，待有登陆后，管理员（专业用户）可删除
 	 */
-	@RequestMapping(value = "/modifyArticle", method = RequestMethod.POST)
+	@RequestMapping(value = "/pro/modifyArticle", method = RequestMethod.POST)
 	public RespResult modify(Long id) {
-		
 		return null;
 	}
 
@@ -111,9 +111,9 @@ public class ArticleController {
 	 * 
 	 */
 	@RequestMapping(value = "/timeline", method = RequestMethod.GET)
-	public RespResult timeline(@RequestParam(value="timeKey", required = false) long timeKey, @RequestParam(value="keyWord", required = false) String keyWord, Pageable pageable) {
-		if (0 == timeKey) {
-			return generator.getFailResult("请选择时间");
+	public RespResult timeline(Long timeKey, String keyWord, Pageable pageable) {
+		if (0 == timeKey || null == timeKey) {
+			timeKey = System.currentTimeMillis();
 		}
 
 		return generator.getSuccessResult("成功", articleService.findAllArticle(timeKey, keyWord, keyWord, pageable));

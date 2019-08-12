@@ -14,10 +14,10 @@ public interface ArticleRepository extends JpaRepository<Article,Integer> {
 	/**
 	 * 查寻文章
 	 */
-	@Query(value = "select a from Article a where a.eventTime <= timeKey "
-			+ "and (a.title like concat('%',titleKey,'%') or a.content like concat('%',contentKey,'%'))"
+	@Query(value = "select a from Article a where a.eventTime <= ?1 "
+			+ "and (a.title like concat('%',?2,'%') or a.content like concat('%',?3,'%'))"
 			+ "and a.isDeleted != true")
-	Page<Article> findAll(@Param("timeKey") long timeKey,@Param("titleKey") String titleKey, @Param("contentKey") String contentKey, Pageable pageable);
+	Page<Article> findAllArticles(long timeKey, String titleKey, String contentKey, Pageable pageable);
 	
 	/**
 	 * 保存文章
