@@ -44,7 +44,7 @@ public class ArticleController {
 	 * 第一版无需登录，留下昵称和邮箱就行，程序自动判断邮箱是否登记
 	 * （存在缺陷是邮箱如跟别人的重复，看不出来是谁的，前端需要提醒）
 	 */
-	@RequestMapping(value = "/recode", method = RequestMethod.POST)
+	@RequestMapping(value = "/record", method = RequestMethod.POST)
 	public RespResult recode(Article article) {
 		if (article.getTitle().isEmpty() || null == article.getTitle()) {
 			return generator.getFailResult("请填写标题");

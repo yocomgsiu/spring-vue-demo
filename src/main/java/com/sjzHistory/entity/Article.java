@@ -27,7 +27,7 @@ public class Article {
 	private String content;
 	// 事件发生时间
 	private long eventTime;
-	// 事件发生时间精确程度，0:精切到天;1:精确到月;2:精确到年
+	// 事件发生时间精确程度，绿色:精确到天; 黄色:精确到月; 红色:精确到年
 	private String accuracy;
 
 	// 是否被删除（删除是假删除，只是打了标志位，数据无价）
